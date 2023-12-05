@@ -1,7 +1,4 @@
-// Login.tsx
-
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LoginPageContainer = styled.div`
@@ -65,9 +62,14 @@ const RegisterLink = styled(Link)`
 `;
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const login = () => {
+    navigate("/dashboard");
+  };
   return (
     <LoginPageContainer>
-      <LoginForm>
+      <LoginForm onSubmit={login}>
         <h2>Login</h2>
         <InputField type="email" placeholder="Email" />
         <InputField type="password" placeholder="Password" />
