@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -128,8 +129,12 @@ const Dashboard = () => {
         </Row1>
         <Row2>
           <div>
-            <button>Send</button>
-            <button>Request</button>
+            <button>
+              <Link to="/sendandrequest/send">Send </Link>
+            </button>
+            <button>
+              <Link to="/sendandrequest/request">request </Link>
+            </button>
             <button>Add bank or card</button>
           </div>
         </Row2>

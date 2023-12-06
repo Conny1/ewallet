@@ -125,7 +125,9 @@ const Crypto = () => {
                 <TableCell>{crypto.fee}</TableCell>
                 <TableCell>{crypto.completion}</TableCell>
                 <TableCell>{crypto.spend}</TableCell>
-                <button>Copy</button>
+
+                <button>Deposit</button>
+                {}
               </TableRow>
             ))}
           </tbody>
