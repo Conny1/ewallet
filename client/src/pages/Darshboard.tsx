@@ -104,6 +104,11 @@ const Row2 = styled.div`
     cursor: pointer;
   }
 `;
+const BtnGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`;
 
 const Dashboard = () => {
   return (
@@ -116,7 +121,11 @@ const Dashboard = () => {
           <BalanceContainer>
             <h2>Balance</h2>
             <p>$0.00</p>
-            <button>Transfer funds</button>
+            <BtnGroup>
+              <button>Transfer funds</button>
+              <button>widthdraw</button>
+              <button>Deposit</button>
+            </BtnGroup>
           </BalanceContainer>
           <ActivityContainer>
             <h2>Recent Activity</h2>
