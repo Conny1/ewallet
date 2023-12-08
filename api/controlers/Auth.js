@@ -28,7 +28,7 @@ export const Register = (req, resp, next) => {
 
 // login
 export const Login = (req, resp, next) => {
-  const q = `SELECT email, password, verified FROM  ${process.env.DATABASE_NAME}.users WHERE email=? `;
+  const q = `SELECT id, email, password, verified FROM  ${process.env.DATABASE_NAME}.users WHERE email=? `;
 
   const values = [req.body.email];
 
@@ -42,11 +42,7 @@ export const Login = (req, resp, next) => {
       result[0]?.password
     );
     if (!isPasword) return next(createError(401, "Invalid email or password"));
-
-    return resp.status(200).json({
-      success: true,
-      status: 200,
-      message: "Loged in",
-    });
+    const { password, ...others } = result[0];
+    return resp.status(200).json(others);
   });
 };

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
 import { Link } from "react-router-dom";
+import { useGetBalaceQuery } from "../utils/ApiRequest";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -111,6 +112,20 @@ const BtnGroup = styled.div`
 `;
 
 const Dashboard = () => {
+  const localdata = localStorage.getItem("user");
+  let userData;
+
+  if (localdata !== null) {
+    userData = JSON.parse(localdata);
+  } else {
+    // Handle the case where localdata is null
+    console.error("localdata is null");
+  }
+
+  const { data } = useGetBalaceQuery(userData?.id);
+
+  // console.log(data);
+
   return (
     <Container>
       <Navbar>
@@ -120,7 +135,7 @@ const Dashboard = () => {
         <Row1>
           <BalanceContainer>
             <h2>Balance</h2>
-            <p>$0.00</p>
+            <p>${data ? data.balance : "0.00"}</p>
             <BtnGroup>
               <button>Transfer funds</button>
               <button>widthdraw</button>
