@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
+import { useGetPendingQuery } from "../utils/ApiRequest";
 
 const Container = styled.div`
   display: flex;
@@ -60,6 +61,16 @@ const SendEmailButton = styled.button`
 
 const AdminPanel = () => {
   const [email, setEmail] = useState("");
+  const localStoragedata = localStorage.getItem("user");
+  let userdata;
+
+  if (localStoragedata !== null) {
+    userdata = JSON.parse(localStoragedata);
+  }
+
+  // rtq getpending request
+
+  const { data } = useGetPendingQuery(userdata?.id);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -73,58 +84,62 @@ const AdminPanel = () => {
     alert(`Email sent to ${email}`);
   };
 
-  const handleApprovePayment = (paymentId: number) => {
+  const handleApprovePayment = (paymentId: number | undefined) => {
     // Logic to approve payment
     alert(`Payment with ID ${paymentId} approved`);
   };
 
-  const paymentsData = [
-    {
-      id: 1,
-      amount: "$50.00",
-      description: "Awaiting Approval",
-      progress: "40%",
-    },
-    {
-      id: 2,
-      amount: "$30.00",
-      description: "Awaiting Approval",
-      progress: "20%",
-    },
-    // Add more payment items as needed
-  ];
+  // const paymentsData = [
+  //   {
+  //     id: 1,
+  //     amount: "$50.00",
+  //     description: "Awaiting Approval",
+  //     progress: "40%",
+  //   },
+  //   {
+  //     id: 2,
+  //     amount: "$30.00",
+  //     description: "Awaiting Approval",
+  //     progress: "20%",
+  //   },
+  //   // Add more payment items as needed
+  // ];
 
   return (
     <>
       <DashboardNav />
 
       <Container>
-        <PaymentTable>
-          <thead>
-            <tr>
-              <TableHeader>Payment ID</TableHeader>
-              <TableHeader>Amount</TableHeader>
-              <TableHeader>Description</TableHeader>
-              <TableHeader>Progress</TableHeader>
-              <TableHeader>Action</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {paymentsData.map((payment) => (
-              <tr key={payment.id}>
-                <TableCell>{payment.id}</TableCell>
-                <TableCell>{payment.amount}</TableCell>
-                <TableCell>{payment.description}</TableCell>
-                <TableCell>{payment.progress}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleApprovePayment(payment.id)}>
-                    Approve
-                  </Button>
-                </TableCell>
+        {data?.length === 0 ? (
+          <p>No pending transactions yet</p>
+        ) : (
+          <PaymentTable>
+            <thead>
+              <tr>
+                <TableHeader>Payment ID</TableHeader>
+                <TableHeader>Amount</TableHeader>
+                <TableHeader>Description</TableHeader>
+                <TableHeader>Progress</TableHeader>
+                <TableHeader>Action</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </PaymentTable>
+            </thead>
+            <tbody>
+              {data?.map((payment) => (
+                <tr key={payment.id}>
+                  <TableCell>{payment.id}</TableCell>
+                  <TableCell>{payment.amount}</TableCell>
+                  <TableCell>Awaiting Approval</TableCell>
+                  <TableCell>50%</TableCell>
+                  <TableCell>
+                    <Button onClick={() => handleApprovePayment(payment?.id)}>
+                      Approve
+                    </Button>
+                  </TableCell>
+                </tr>
+              ))}
+            </tbody>
+          </PaymentTable>
+        )}
 
         <EmailForm>
           <label htmlFor="email">Send Email to New User:</label>

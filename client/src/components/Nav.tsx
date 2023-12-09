@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import logo from "../images/logo.png";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   padding: 15px;
@@ -16,27 +17,30 @@ const Logo = styled.div`
 `;
 
 const Auth = styled.div`
-  width: 20%;
+  max-width: 250px;
+  width: 40%;
   display: flex;
   justify-content: space-between;
   margin-right: 4px;
+`;
 
-  button {
-    border-radius: 30px;
-    background-color: #fff;
-    height: 30px;
-    width: 100px;
-    border: none;
-    outline: 1px solid #e4d813;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+const LinkBtn = styled(Link)`
+  border-radius: 30px;
+  background-color: #fff;
+  /* height: 40px; */
+  width: 100px;
+  border: none;
+  font-size: 15px;
+  text-align: center;
+  text-decoration: none;
+  outline: 1px solid #e4d813;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-    &:hover {
-      background-color: #e4d813;
-    }
+  &:hover {
+    background-color: #e4d813;
   }
-
-  button:last-child {
+  &:last-child {
     background-color: #e5db12;
     color: #fff;
 
@@ -55,8 +59,8 @@ const Nav = () => {
       </Logo>
 
       <Auth>
-        <button>Login</button>
-        <button>Sign up</button>
+        <LinkBtn to="/login">Login</LinkBtn>
+        <LinkBtn to="/register">Sign up</LinkBtn>
       </Auth>
     </Container>
   );

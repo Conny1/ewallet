@@ -1,5 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  useAddtopendingMutation,
+  useSendmoneyMutation,
+} from "../utils/ApiRequest";
+import { User } from "../utils/Types";
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +40,6 @@ const AmountInput = styled(Input)`
   font-size: 18px;
 `;
 
-const NoteInput = styled(Input)`
-  height: 60px;
-`;
-
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
@@ -48,13 +51,62 @@ const SubmitButton = styled.button`
 `;
 
 const Send = () => {
+  const [amount, setamount] = useState("");
+  const [email, setemail] = useState("");
+  const localStoragedata = localStorage.getItem("user");
+  let userdata: User;
+
+  if (localStoragedata !== null) {
+    userdata = JSON.parse(localStoragedata);
+  }
+
+  const [sendamoney, { isSuccess: sendsucces }] = useSendmoneyMutation();
+  const [addtopending, { isSuccess: addsucces }] = useAddtopendingMutation();
+
+  useEffect(() => {
+    if (addsucces && sendsucces) {
+      toast("Transaction succesful");
+    }
+  }, [addsucces, sendsucces]);
+
+  const send = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email || !amount) {
+      return toast("Enter all provided fields");
+    }
+    try {
+      await sendamoney({
+        userid: userdata?.id,
+        balance: Number(amount),
+      });
+
+      await addtopending({
+        userid: userdata?.id,
+        amount: Number(amount),
+        pending: true,
+        fromid: userdata.email,
+        toid: email,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container>
+      <ToastContainer />
       <Title>Send Money</Title>
-      <Form>
-        <AmountInput type="text" placeholder="Enter Amount" />
-        <Input type="text" placeholder="Recipient's Email or Phone" />
-        <NoteInput type="text" placeholder="Add a note (optional)" />
+      <Form onSubmit={send}>
+        <AmountInput
+          type="number"
+          onChange={(e) => setamount(e.target.value)}
+          placeholder="Enter Amount"
+        />
+        <Input
+          type="text"
+          onChange={(e) => setemail(e.target.value)}
+          placeholder="Recipient's Email or Phone"
+        />
+
         <SubmitButton>Send Money</SubmitButton>
       </Form>
     </Container>

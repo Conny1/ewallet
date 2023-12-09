@@ -7,13 +7,16 @@ export type User = {
 };
 
 export type Balance = {
-  id: number;
-  userid: number;
-  balance: number;
+  id?: number;
+  userid?: number;
+  balance?: number;
 };
 
 export type Pending = {
-  id: number;
-  userid: number;
-  amount: number;
+  id?: number;
+  userid?: number;
+  amount?: number;
+  pending?: boolean;
+  fromid?: string;
+  toid?: string;
 };
