@@ -9,7 +9,9 @@ export type User = {
 export type Balance = {
   id?: number;
   userid?: number;
+  useremail?: string;
   balance?: number;
+  pendingid?: number;
 };
 
 export type Pending = {

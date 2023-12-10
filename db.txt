@@ -1,0 +1,21 @@
+pending
+
+CREATE TABLE ewallet.pending(
+id INT  PRIMARY KEY auto_increment NOT NULL,
+userid INT NOT NULL,
+amount DECIMAL(10, 2),
+pending VARCHAR(255) default "false",
+fromid VARCHAR(255) NOT NULL,
+toid VARCHAR(255) NOT NULL,
+FOREIGN KEY (userid) REFERENCES ewallet.users(id)
+);
+
+balance
+
+CREATE TABLE ewallet.balance(
+id INT  PRIMARY KEY auto_increment NOT NULL,
+userid INT NOT NULL,
+useremail VARCHAR(255) NOT NULL,
+balance DECIMAL(10,2) DEFAULT 1000 ,
+FOREIGN KEY (userid) REFERENCES ewallet.users(id)
+);

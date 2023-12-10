@@ -1,5 +1,5 @@
-import React from "react";
 import styled from "styled-components";
+import { useGetPendingQuery } from "../utils/ApiRequest";
 
 const Container = styled.div`
   display: flex;
@@ -30,50 +30,62 @@ const Message = styled.p`
   color: #555;
 `;
 
-const paymentsData = [
-  {
-    id: 1,
-    amount: "$50.00",
-    description: "Awaiting Approval",
-    progress: "40%",
-  },
-  {
-    id: 2,
-    amount: "$30.00",
-    description: "Awaiting Approval",
-    progress: "20%",
-  },
-  // Add more payment items as needed
-];
+// const paymentsData = [
+//   {
+//     id: 1,
+//     amount: "$50.00",
+//     description: "Awaiting Approval",
+//     progress: "40%",
+//   },
+//   {
+//     id: 2,
+//     amount: "$30.00",
+//     description: "Awaiting Approval",
+//     progress: "20%",
+//   },
+
+// ];
 
 const PaymentPendingPage = () => {
+  const localStoragedata = localStorage.getItem("user");
+  let userdata;
+
+  if (localStoragedata !== null) {
+    userdata = JSON.parse(localStoragedata);
+  }
+
+  const { data } = useGetPendingQuery(userdata?.id);
   return (
     <Container>
-      <Table>
-        <thead>
-          <tr>
-            <TableHeader>Amount</TableHeader>
-            <TableHeader>Description</TableHeader>
-            <TableHeader>Progress</TableHeader>
-            <TableHeader>Action</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {paymentsData.map((payment) => (
-            <tr key={payment.id}>
-              <TableCell>{payment.amount}</TableCell>
-              <TableCell>{payment.description}</TableCell>
-              <TableCell></TableCell>
-              <TableCell>
-                <Message>
-                  Your payment is currently pending. Please wait for the
-                  transaction to complete.
-                </Message>
-              </TableCell>
+      {data?.length === 0 ? (
+        "No pending Transaction yet"
+      ) : (
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>Amount</TableHeader>
+              <TableHeader>Description</TableHeader>
+              <TableHeader>Progress</TableHeader>
+              <TableHeader>Action</TableHeader>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data?.map((payment) => (
+              <tr key={payment.id}>
+                <TableCell>{payment.amount}</TableCell>
+                <TableCell>Awaiting Approval</TableCell>
+                <TableCell></TableCell>
+                <TableCell>
+                  <Message>
+                    Your payment is currently pending. Please wait for the
+                    transaction to complete.
+                  </Message>
+                </TableCell>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 };

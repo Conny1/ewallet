@@ -50,6 +50,19 @@ export const walletApi = createApi({
       }),
       invalidatesTags: ["pending"],
     }),
+
+    receivemoney: builder.mutation<void, Balance>({
+      query: (body) => ({
+        url: "/users/receivemoney",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["pending"],
+    }),
+    pendingtransacrion: builder.query<Pending[], number>({
+      query: (id) => `users/pendingtransacrion/${id}`,
+      providesTags: ["pending"],
+    }),
   }),
 });
 
@@ -62,4 +75,6 @@ export const {
   useGetPendingQuery,
   useAddtopendingMutation,
   useSendmoneyMutation,
+  useReceivemoneyMutation,
+  usePendingtransacrionQuery,
 } = walletApi;

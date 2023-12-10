@@ -1,140 +1,86 @@
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
 
-const MainContainr = styled.div``;
-const Navcontainer = styled.div``;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const CryptoPageContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f8f8f8; /* Set a light background color */
 `;
 
-const Title = styled.h2`
-  color: #333;
+const CryptoSection = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 8px;
   margin-bottom: 20px;
-  color: #e5db12; /* Use the theme color for the title */
+  padding: 20px;
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+const CryptoTitle = styled.h2`
+  font-size: 1.5rem;
+  margin-bottom: 10px;
 `;
 
-const TableRow = styled.tr`
-  border-bottom: 1px solid #ccc;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  button {
-    height: 40px;
-    background-color: #e5db12;
-    border: 1px;
-    border-radius: 6px;
-    color: #333;
-    cursor: pointer;
-  }
+const CryptoDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 `;
 
-const TableHeader = styled.th`
-  text-align: left;
-  padding: 10px;
-  background-color: #f5f5f5;
+const CryptoAddress = styled.div`
+  font-size: 1rem;
+  color: #333;
 `;
 
-const TableCell = styled.td`
-  padding: 10px;
-  text-align: left;
+const CopyButton = styled.button`
+  background-color: #e5db12;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
-const cryptoData = [
-  {
-    name: "Bitcoin",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "2 Bitcoin network confirmations",
-    spend: "0.00 USD",
-  },
-  {
-    name: "Ethereum",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "18 Ethereum network confirmations",
-    spend: "0.00 USD",
-  },
-  {
-    name: "Litecoin",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "4 Litecoin network confirmations",
-    spend: "0.00 USD",
-  },
-  {
-    name: "Bitcoin Cash",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "6 Bitcoin Cash network confirmations",
-    spend: "0.00 USD",
-  },
-  {
-    name: "Ripple",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "Instant",
-    spend: "0.00 USD",
-  },
-  {
-    name: "TRON",
-    feePercent: "0.00%",
-    fee: "0.00 USD",
-    completion: "1 TRON network confirmation",
-    spend: "0.00 USD",
-  },
-];
+const DepositInfo = styled.div`
+  font-size: 1rem;
+  color: #555;
+`;
 
-const Crypto = () => {
+const CryptoPage = () => {
   return (
-    <MainContainr>
-      <Navcontainer>
-        <DashboardNav />
-      </Navcontainer>
+    <>
+      <DashboardNav />
 
-      <Container>
-        <Title>Crypto Fees</Title>
-        <Table>
-          <thead>
-            <TableRow>
-              <TableHeader>Crypto</TableHeader>
-              <TableHeader>Fee %</TableHeader>
-              <TableHeader>Fee</TableHeader>
-              <TableHeader>Completion</TableHeader>
-              <TableHeader>You Spend</TableHeader>
-              <TableHeader>Address</TableHeader>
-            </TableRow>
-          </thead>
-          <tbody>
-            {cryptoData.map((crypto, index) => (
-              <TableRow key={index}>
-                <TableCell>{crypto.name}</TableCell>
-                <TableCell>{crypto.feePercent}</TableCell>
-                <TableCell>{crypto.fee}</TableCell>
-                <TableCell>{crypto.completion}</TableCell>
-                <TableCell>{crypto.spend}</TableCell>
+      <CryptoPageContainer>
+        <CryptoSection>
+          <CryptoTitle>Bitcoin</CryptoTitle>
+          <CryptoDetails>
+            <CryptoAddress>
+              Bitcoin Address: 1abcde2FGHijkLmnpqrsTUVwxYZ
+            </CryptoAddress>
+            <CopyButton>Copy Address</CopyButton>
+          </CryptoDetails>
+          <DepositInfo>
+            0.00% | 0.00 USD | 2 Bitcoin network confirmations | 0.00 USD
+            Deposit
+          </DepositInfo>
+        </CryptoSection>
 
-                <button>Deposit</button>
-                {}
-              </TableRow>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
-    </MainContainr>
+        <CryptoSection>
+          <CryptoTitle>Ethereum</CryptoTitle>
+          <CryptoDetails>
+            <CryptoAddress>Ethereum Address: 0xAbCdEf0123456789</CryptoAddress>
+            <CopyButton>Copy Address</CopyButton>
+          </CryptoDetails>
+          <DepositInfo>
+            0.00% | 0.00 USD | 18 Ethereum network confirmations | 0.00 USD
+            Deposit
+          </DepositInfo>
+        </CryptoSection>
+
+        {/* Add similar sections for other cryptocurrencies */}
+      </CryptoPageContainer>
+    </>
   );
 };
 
-export default Crypto;
+export default CryptoPage;

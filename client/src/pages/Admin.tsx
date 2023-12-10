@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
-import { useGetPendingQuery } from "../utils/ApiRequest";
+import {
+  useGetPendingQuery,
+  useReceivemoneyMutation,
+} from "../utils/ApiRequest";
+import { toast, ToastContainer } from "react-toastify";
 
 const Container = styled.div`
   display: flex;
@@ -72,6 +76,16 @@ const AdminPanel = () => {
 
   const { data } = useGetPendingQuery(userdata?.id);
 
+  // approve transactions
+  const [receivemoney, { isSuccess: receiveSucess }] =
+    useReceivemoneyMutation();
+
+  useEffect(() => {
+    if (receiveSucess) {
+      toast("transaction complete");
+    }
+  }, [receiveSucess]);
+
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
@@ -84,9 +98,15 @@ const AdminPanel = () => {
     alert(`Email sent to ${email}`);
   };
 
-  const handleApprovePayment = (paymentId: number | undefined) => {
+  const handleApprovePayment = (
+    amount: number | undefined,
+    toid: string | undefined,
+    id: number | undefined
+  ) => {
     // Logic to approve payment
-    alert(`Payment with ID ${paymentId} approved`);
+    if (toid && amount) {
+      receivemoney({ balance: amount, useremail: toid, pendingid: id });
+    }
   };
 
   // const paymentsData = [
@@ -108,7 +128,7 @@ const AdminPanel = () => {
   return (
     <>
       <DashboardNav />
-
+      <ToastContainer />
       <Container>
         {data?.length === 0 ? (
           <p>No pending transactions yet</p>
@@ -131,7 +151,15 @@ const AdminPanel = () => {
                   <TableCell>Awaiting Approval</TableCell>
                   <TableCell>50%</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleApprovePayment(payment?.id)}>
+                    <Button
+                      onClick={() =>
+                        handleApprovePayment(
+                          payment?.amount,
+                          payment?.toid,
+                          payment?.id
+                        )
+                      }
+                    >
                       Approve
                     </Button>
                   </TableCell>

@@ -1,10 +1,24 @@
 import styled from "styled-components";
+import { useState } from "react";
 import DashboardNav from "../components/DashboardNav";
 import { Link } from "react-router-dom";
 import { useGetBalaceQuery } from "../utils/ApiRequest";
+import WidthraModel from "../components/widthrawModel";
 
 const Container = styled.div`
   min-height: 100vh;
+  position: relative;
+  section {
+    height: 300px;
+    width: fit-content;
+    background-color: #e5db12;
+    padding: 2rem;
+    position: absolute;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const Navbar = styled.div`
@@ -112,6 +126,7 @@ const BtnGroup = styled.div`
 `;
 
 const Dashboard = () => {
+  const [widthraw, setwidthraw] = useState(false);
   const localdata = localStorage.getItem("user");
   let userData;
 
@@ -137,9 +152,14 @@ const Dashboard = () => {
             <h2>Balance</h2>
             <p>${data ? data.balance : "0.00"}</p>
             <BtnGroup>
-              <button>Transfer funds</button>
-              <button>widthdraw</button>
-              <button>Deposit</button>
+              <button
+                onClick={() => {
+                  setwidthraw(true);
+                }}
+              >
+                widthdraw
+              </button>
+              {/* <button>Deposit</button> */}
             </BtnGroup>
           </BalanceContainer>
           <ActivityContainer>
@@ -163,6 +183,11 @@ const Dashboard = () => {
           </div>
         </Row2>
       </Body>
+      {widthraw && (
+        <section>
+          <WidthraModel setwidthraw={setwidthraw} />
+        </section>
+      )}
     </Container>
   );
 };
