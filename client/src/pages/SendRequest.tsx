@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
+import { Outlet } from "react-router-dom";
 
 const MainContainr = styled.div``;
 const Navcontainer = styled.div``;
@@ -53,6 +54,7 @@ const SendAndRequestPage = () => {
         </ButtonContainer>
         {/* Additional components and sections can be added here */}
       </Container>
+      <Outlet />
     </MainContainr>
   );
 };

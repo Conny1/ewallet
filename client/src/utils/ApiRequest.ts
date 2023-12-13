@@ -5,7 +5,23 @@ import { Balance, Pending, User } from "./Types";
 // Define a service using a base URL and expected endpoints
 export const walletApi = createApi({
   reducerPath: "walletApi",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_BASE_URL,
+    prepareHeaders: (headers) => {
+      // const token = (getState() as RootState).AuthSlice.authDetails?.tokens;
+      const authDet = localStorage.getItem("user");
+
+      if (authDet) {
+        const token = JSON.parse(authDet).tokens;
+
+        // If we have a token set in state, let's assume that we should be passing it.
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+        }
+      }
+      return headers;
+    },
+  }),
   tagTypes: ["balance", "pending"],
   endpoints: (builder) => ({
     register: builder.mutation<void, User>({

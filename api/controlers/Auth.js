@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import connection from "../utils/db.js";
 import createError from "../utils/Error.js";
 import bcrypt from "bcryptjs";
@@ -28,7 +29,7 @@ export const Register = (req, resp, next) => {
 
 // login
 export const Login = (req, resp, next) => {
-  const q = `SELECT id, email, password, verified FROM  ${process.env.DATABASE_NAME}.users WHERE email=? `;
+  const q = `SELECT id, email, password, verified,isadmin FROM  ${process.env.DATABASE_NAME}.users WHERE email=? `;
 
   const values = [req.body.email];
 
@@ -42,7 +43,13 @@ export const Login = (req, resp, next) => {
       result[0]?.password
     );
     if (!isPasword) return next(createError(401, "Invalid email or password"));
+
     const { password, ...others } = result[0];
-    return resp.status(200).json(others);
+
+    const tokens = jwt.sign(
+      { id: others.id, admin: others.isadmin },
+      "123login"
+    );
+    return resp.status(200).json({ ...others, tokens });
   });
 };

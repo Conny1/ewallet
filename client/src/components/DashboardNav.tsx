@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import logo from "../images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   padding: 15px;
@@ -56,6 +56,13 @@ const NavLink = styled(Link)`
 `;
 
 const DashboardNav = () => {
+  const navigate = useNavigate();
+  const localstorageData = localStorage.getItem("user");
+  let userData;
+  if (localstorageData) {
+    userData = JSON.parse(localstorageData);
+  }
+
   return (
     <Container>
       <Logo>
@@ -66,9 +73,18 @@ const DashboardNav = () => {
       <NavLink to="/crypto">Crypto wallet</NavLink>
 
       <Auth>
-        <Link to="/admin">Admin</Link>
-        <Link to="/profile">Profile</Link>
-        <button>Logout</button>
+        {userData?.isadmin === "true" ? (
+          <NavLink to="/admin">Admin</NavLink>
+        ) : null}
+        <NavLink to="/profile">Profile</NavLink>
+        <button
+          onClick={() => {
+            localStorage.clear();
+            navigate("/login");
+          }}
+        >
+          Logout
+        </button>
       </Auth>
     </Container>
   );
