@@ -18,12 +18,6 @@ export const Register = (req, resp, next) => {
     if (err) return next(createError(400, "Bad  Auth request"));
 
     // email to be sent to inbox about account creation
-
-    return resp.status(200).json({
-      success: true,
-      status: 200,
-      message: "Account created",
-    });
   });
 };
 

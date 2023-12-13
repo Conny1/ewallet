@@ -1,5 +1,11 @@
 import createError from "../utils/Error.js";
 import connection from "../utils/db.js";
+import {
+  SendMoneyEmail,
+  inviteemail,
+  receiveMoneyEmail,
+  sendRequestMail,
+} from "../utils/email.js";
 
 // getBalance
 
@@ -67,11 +73,21 @@ export const addtopending = (req, resp, next) => {
 };
 
 // subtract balance while sending
-export const sendMoney = (req, resp, next) => {
+export const sendMoney = async (req, resp, next) => {
   const q = `UPDATE  ${process.env.DATABASE_NAME}.balance SET balance = balance - ? WHERE userid=?`;
   const values = [[req.body.balance], [req.body.userid]];
 
+  try {
+    await SendMoneyEmail({
+      amount: req.body.balance,
+      email: req.body.useremail,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
   connection.query(q, values, (err, results) => {
+    console.log(err);
     if (err) return next(createError(500, "sendMoney server  error"));
 
     return resp.status(200).json({
@@ -83,11 +99,15 @@ export const sendMoney = (req, resp, next) => {
 };
 
 // Update to complet transaction
-export const receiveMoney = (req, resp, next) => {
+export const receiveMoney = async (req, resp, next) => {
   const q = `UPDATE  ${process.env.DATABASE_NAME}.balance SET balance = balance + ? WHERE useremail=?`;
   const values = [[req.body.balance], [req.body.useremail]];
   // console.log(values);
 
+  await receiveMoneyEmail({
+    email: req.body.useremail,
+    amount: req.body.balance,
+  });
   connection.query(q, values, (err, results) => {
     if (err) return next(createError(500, "sendMoney server  error"));
 
@@ -117,4 +137,45 @@ export const getPendingtransactions = (req, resp, next) => {
 
     return resp.status(200).json(results);
   });
+};
+
+// request payment
+export const requestmoney = async (req, resp, next) => {
+  const details = {
+    amount: req.body.amount,
+    email: req.body.email,
+    receiveremail: req.body.receiveremail,
+  };
+
+  // console.log(details);
+
+  try {
+    await sendRequestMail(details);
+
+    resp.status(200).json({
+      success: true,
+      status: 200,
+      message: "Email sent",
+    });
+  } catch (error) {
+    next(createError(500, "request server error"));
+  }
+};
+
+export const adminadusers = async (req, resp, next) => {
+  const details = {
+    email: req.body.email,
+  };
+
+  try {
+    await inviteemail(details);
+
+    resp.status(200).json({
+      success: true,
+      status: 200,
+      message: "Email sent",
+    });
+  } catch (error) {
+    next(createError(500, "request server error"));
+  }
 };

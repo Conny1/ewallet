@@ -22,3 +22,10 @@ export type Pending = {
   fromid?: string;
   toid?: string;
 };
+
+export type Email = {
+  id?: number;
+  amount?: string;
+  email?: string;
+  receiveremail?: string;
+};

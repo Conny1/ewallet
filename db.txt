@@ -19,3 +19,5 @@ useremail VARCHAR(255) NOT NULL,
 balance DECIMAL(10,2) DEFAULT 1000 ,
 FOREIGN KEY (userid) REFERENCES ewallet.users(id)
 );
+
+NWWo.-BKzH5b

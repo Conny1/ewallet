@@ -78,6 +78,7 @@ const Send = () => {
       await sendamoney({
         userid: userdata?.id,
         balance: Number(amount),
+        useremail: userdata?.email,
       });
 
       await addtopending({

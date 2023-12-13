@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useRequestmoneyMutation } from "../utils/ApiRequest";
+import { User } from "../utils/Types";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +37,6 @@ const AmountInput = styled(Input)`
   font-size: 18px;
 `;
 
-const NoteInput = styled(Input)`
-  height: 60px;
-`;
-
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
@@ -48,13 +48,57 @@ const SubmitButton = styled.button`
 `;
 
 const Request = () => {
+  const [receiveremail, setreceiveremail] = useState("");
+  const [amount, setamount] = useState("");
+  const [requestmoney, { isSuccess }] = useRequestmoneyMutation();
+  const localdata = localStorage.getItem("user");
+  let userData: User;
+
+  if (localdata !== null) {
+    userData = JSON.parse(localdata);
+  } else {
+    // Handle the case where localdata is null
+    console.error("localdata is null");
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast("Request sent");
+      setamount("");
+      setreceiveremail("");
+    }
+  }, [isSuccess]);
+
+  const requestbt = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await requestmoney({
+        id: userData.id,
+        email: userData?.email,
+        amount,
+        receiveremail,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
+      <ToastContainer />
       <Title>Request Money</Title>
-      <Form>
-        <AmountInput type="text" placeholder="Enter Amount" />
-        <Input type="text" placeholder="Payer's Email or Phone" />
-        <NoteInput type="text" placeholder="Add a note (optional)" />
+      <Form onSubmit={requestbt}>
+        <AmountInput
+          type="text"
+          onChange={(e) => setamount(e.target.value)}
+          placeholder="Enter Amount"
+        />
+        <Input
+          type="text"
+          onChange={(e) => setreceiveremail(e.target.value)}
+          placeholder="Payer's Email "
+        />
+
         <SubmitButton>Request Money</SubmitButton>
       </Form>
     </Container>

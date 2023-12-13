@@ -49,13 +49,14 @@ const CryptoPage = () => {
   return (
     <>
       <DashboardNav />
+      <h3> Send to the provided address to deposit </h3>
 
       <CryptoPageContainer>
         <CryptoSection>
           <CryptoTitle>Bitcoin</CryptoTitle>
           <CryptoDetails>
             <CryptoAddress>
-              Bitcoin Address: 1abcde2FGHijkLmnpqrsTUVwxYZ
+              Bitcoin Address: bc1q23h2gvyaz65r9h6l9e9emqv4fau0ks2kvm2aw9
             </CryptoAddress>
             <CopyButton>Copy Address</CopyButton>
           </CryptoDetails>
@@ -68,12 +69,27 @@ const CryptoPage = () => {
         <CryptoSection>
           <CryptoTitle>Ethereum</CryptoTitle>
           <CryptoDetails>
-            <CryptoAddress>Ethereum Address: 0xAbCdEf0123456789</CryptoAddress>
+            <CryptoAddress>
+              Ethereum Address: 0x2BadD134beC282Cd40f40FfaF189297b5F3a4547
+            </CryptoAddress>
             <CopyButton>Copy Address</CopyButton>
           </CryptoDetails>
           <DepositInfo>
             0.00% | 0.00 USD | 18 Ethereum network confirmations | 0.00 USD
             Deposit
+          </DepositInfo>
+        </CryptoSection>
+
+        <CryptoSection>
+          <CryptoTitle>Usdt</CryptoTitle>
+          <CryptoDetails>
+            <CryptoAddress>
+              Usdt Address: 0x2BadD134beC282Cd40f40FfaF189297b5F3a4547
+            </CryptoAddress>
+            <CopyButton>Copy Address</CopyButton>
+          </CryptoDetails>
+          <DepositInfo>
+            0.00% | 0.00 USD | 2 Usdt network confirmations | 0.00 USD Deposit
           </DepositInfo>
         </CryptoSection>
 

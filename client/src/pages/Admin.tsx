@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
 import {
   useGetPendingQuery,
+  useInviteUsersMutation,
   useReceivemoneyMutation,
 } from "../utils/ApiRequest";
 import { toast, ToastContainer } from "react-toastify";
@@ -79,23 +80,34 @@ const AdminPanel = () => {
   // approve transactions
   const [receivemoney, { isSuccess: receiveSucess }] =
     useReceivemoneyMutation();
+  // send mail
+  const [inviteUsers, { isSuccess: emailsent }] = useInviteUsersMutation();
 
   useEffect(() => {
     if (receiveSucess) {
       toast("transaction complete");
     }
-  }, [receiveSucess]);
+    if (emailsent) {
+      toast("Email sent");
+      setEmail("");
+    }
+  }, [receiveSucess, emailsent]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
-  const handleSendEmail = (
+  const handleSendEmail = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
     // Logic to send email to the new user
     alert(`Email sent to ${email}`);
+    try {
+      await inviteUsers({ email });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleApprovePayment = (

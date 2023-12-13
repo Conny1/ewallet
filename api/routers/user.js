@@ -7,6 +7,8 @@ import {
   receiveMoney,
   sendMoney,
   setBalance,
+  requestmoney,
+  adminadusers,
 } from "../controlers/user.js";
 import { VerifyAdmin, VerifyUser } from "../utils/VerifyTokens.js";
 
@@ -22,5 +24,9 @@ Router.get("/getbalance/:id", VerifyUser, getBalance);
 Router.get("/pending/:id", VerifyAdmin, getPending);
 // user pending
 Router.get("/pendingtransacrion/:id", VerifyUser, getPendingtransactions);
+
+Router.post("/request/:id", VerifyUser, requestmoney);
+
+Router.post("/inviteuser", VerifyAdmin, adminadusers);
 
 export default Router;

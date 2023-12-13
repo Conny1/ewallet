@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Balance, Pending, User } from "./Types";
+import { Balance, Email, Pending, User } from "./Types";
 
 // Define a service using a base URL and expected endpoints
 export const walletApi = createApi({
@@ -79,6 +79,22 @@ export const walletApi = createApi({
       query: (id) => `users/pendingtransacrion/${id}`,
       providesTags: ["pending"],
     }),
+
+    requestmoney: builder.mutation<void, Email>({
+      query: (body) => ({
+        url: `/users/request/${body.id}`,
+        method: "POST",
+        body,
+      }),
+    }),
+
+    inviteUsers: builder.mutation<void, Email>({
+      query: (body) => ({
+        url: `/users/inviteuser`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -93,4 +109,6 @@ export const {
   useSendmoneyMutation,
   useReceivemoneyMutation,
   usePendingtransacrionQuery,
+  useInviteUsersMutation,
+  useRequestmoneyMutation,
 } = walletApi;
