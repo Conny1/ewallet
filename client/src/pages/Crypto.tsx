@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
+import copy from "copy-to-clipboard";
+import { ToastContainer, toast } from "react-toastify";
+import Footer from "../components/Footer";
 
 const CryptoPageContainer = styled.div`
   max-width: 800px;
@@ -12,6 +15,7 @@ const CryptoSection = styled.div`
   border-radius: 8px;
   margin-bottom: 20px;
   padding: 20px;
+  /* outline: 1px solid red; */
 `;
 
 const CryptoTitle = styled.h2`
@@ -22,13 +26,15 @@ const CryptoTitle = styled.h2`
 const CryptoDetails = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 10px;
 `;
 
-const CryptoAddress = styled.div`
+const CryptoAddress = styled.p`
   font-size: 1rem;
   color: #333;
+  /* outline: 1px solid red; */
 `;
 
 const CopyButton = styled.button`
@@ -49,16 +55,22 @@ const CryptoPage = () => {
   return (
     <>
       <DashboardNav />
+      <ToastContainer />
       <h3> Send to the provided address to deposit </h3>
 
       <CryptoPageContainer>
         <CryptoSection>
           <CryptoTitle>Bitcoin</CryptoTitle>
           <CryptoDetails>
-            <CryptoAddress>
-              Bitcoin Address: bc1q23h2gvyaz65r9h6l9e9emqv4fau0ks2kvm2aw9
-            </CryptoAddress>
-            <CopyButton>Copy Address</CopyButton>
+            <CryptoAddress>Bitcoin Address: bc1q23h2...</CryptoAddress>
+            <CopyButton
+              onClick={() => {
+                copy("bc1q23h2gvyaz65r9h6l9e9emqv4fau0ks2kvm2aw9");
+                toast("copied");
+              }}
+            >
+              Copy Address
+            </CopyButton>
           </CryptoDetails>
           <DepositInfo>
             0.00% | 0.00 USD | 2 Bitcoin network confirmations | 0.00 USD
@@ -69,10 +81,16 @@ const CryptoPage = () => {
         <CryptoSection>
           <CryptoTitle>Ethereum</CryptoTitle>
           <CryptoDetails>
-            <CryptoAddress>
-              Ethereum Address: 0x2BadD134beC282Cd40f40FfaF189297b5F3a4547
-            </CryptoAddress>
-            <CopyButton>Copy Address</CopyButton>
+            <CryptoAddress>Ethereum Address: 0x2BadD134b....</CryptoAddress>
+            <CopyButton
+              onClick={() => {
+                copy("0x2BadD134beC282Cd40f40FfaF189297b5F3a4547");
+
+                toast("copied");
+              }}
+            >
+              Copy Address
+            </CopyButton>
           </CryptoDetails>
           <DepositInfo>
             0.00% | 0.00 USD | 18 Ethereum network confirmations | 0.00 USD
@@ -83,10 +101,15 @@ const CryptoPage = () => {
         <CryptoSection>
           <CryptoTitle>Usdt</CryptoTitle>
           <CryptoDetails>
-            <CryptoAddress>
-              Usdt Address: 0x2BadD134beC282Cd40f40FfaF189297b5F3a4547
-            </CryptoAddress>
-            <CopyButton>Copy Address</CopyButton>
+            <CryptoAddress>Usdt Address: 0x2BadD134beC28....</CryptoAddress>
+            <CopyButton
+              onClick={() => {
+                copy("0x2BadD134beC282Cd40f40FfaF189297b5F3a4547");
+                toast("copied");
+              }}
+            >
+              Copy Address
+            </CopyButton>
           </CryptoDetails>
           <DepositInfo>
             0.00% | 0.00 USD | 2 Usdt network confirmations | 0.00 USD Deposit
@@ -95,6 +118,7 @@ const CryptoPage = () => {
 
         {/* Add similar sections for other cryptocurrencies */}
       </CryptoPageContainer>
+      <Footer />
     </>
   );
 };

@@ -4,6 +4,10 @@ import DashboardNav from "../components/DashboardNav";
 import { Link } from "react-router-dom";
 import { useGetBalaceQuery } from "../utils/ApiRequest";
 import WidthraModel from "../components/widthrawModel";
+import Modal from "../components/VerifyModal";
+import { mobile } from "../utils/Responsive";
+import WithrawSucessModal from "../components/SuccessWidthrawModal";
+import Footer from "../components/Footer";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -18,6 +22,7 @@ const Container = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    ${mobile({ width: "80%" })}
   }
 `;
 
@@ -29,6 +34,7 @@ const Body = styled.div`
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
+  ${mobile({ flexDirection: "column-reverse" })};
 `;
 
 const Row1 = styled.div`
@@ -107,6 +113,18 @@ const Row2 = styled.div`
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
+  ${mobile({ flex: 1, width: "auto" })};
+  div {
+    ${mobile({
+      width: "80%",
+      display: "flex",
+      flexWrap: "wrap",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "10px",
+    })};
+    /* outline: 1px solid red; */
+  }
 
   button {
     margin-bottom: 10px;
@@ -117,6 +135,7 @@ const Row2 = styled.div`
     border-radius: 6px;
     color: #333;
     cursor: pointer;
+    ${mobile({ width: "200px" })};
   }
 `;
 const BtnGroup = styled.div`
@@ -125,8 +144,11 @@ const BtnGroup = styled.div`
   gap: 10px;
 `;
 
+const Verify = styled.div``;
+
 const Dashboard = () => {
   const [widthraw, setwidthraw] = useState(false);
+  const [widthrawSucess, setwidthrawSucess] = useState(false);
   const localdata = localStorage.getItem("user");
   let userData;
 
@@ -136,6 +158,7 @@ const Dashboard = () => {
     // Handle the case where localdata is null
     console.error("localdata is null");
   }
+  // console.log(userData);
 
   const { data } = useGetBalaceQuery(userData?.id);
 
@@ -146,18 +169,31 @@ const Dashboard = () => {
       <Navbar>
         <DashboardNav />
       </Navbar>
+      {userData.verified === "false" ? (
+        <Verify>
+          <Modal />
+        </Verify>
+      ) : null}
+
+      {widthrawSucess && (
+        <Verify>
+          <WithrawSucessModal setwidthrawSucess={setwidthrawSucess} />
+        </Verify>
+      )}
       <Body>
         <Row1>
           <BalanceContainer>
             <h2>Balance</h2>
-            <p>${data ? data.balance : "0.00"}</p>
+            <p>
+              ${data ? Number(data.balance)?.toLocaleString("en-US") : "0.00"}
+            </p>
             <BtnGroup>
               <button
                 onClick={() => {
                   setwidthraw(true);
                 }}
               >
-                widthdraw
+                Widthdraw
               </button>
               {/* <button>Deposit</button> */}
             </BtnGroup>
@@ -177,7 +213,7 @@ const Dashboard = () => {
               <Link to="/sendandrequest/send">Send </Link>
             </button>
             <button>
-              <Link to="/sendandrequest/request">request </Link>
+              <Link to="/sendandrequest/request">Request </Link>
             </button>
             <button>Add bank or card</button>
           </div>
@@ -185,9 +221,15 @@ const Dashboard = () => {
       </Body>
       {widthraw && (
         <section>
-          <WidthraModel setwidthraw={setwidthraw} />
+          <WidthraModel
+            setwidthraw={setwidthraw}
+            setwidthrawSucess={setwidthrawSucess}
+          />
         </section>
       )}
+      <Navbar>
+        <Footer />
+      </Navbar>
     </Container>
   );
 };

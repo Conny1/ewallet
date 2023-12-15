@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
+import { mobile } from "../utils/Responsive";
 
 const Container = styled.div`
   padding: 15px;
@@ -12,7 +13,8 @@ const Container = styled.div`
 
 const Logo = styled.div`
   img {
-    width: 160px;
+    width: 250px;
+    ${mobile({ width: "190px" })};
   }
 `;
 
@@ -22,6 +24,12 @@ const Auth = styled.div`
   display: flex;
   justify-content: space-between;
   margin-right: 4px;
+  ${mobile({
+    flexDirection: "column",
+    gap: "10px",
+
+    alignItems: "flex-end",
+  })};
 `;
 
 const LinkBtn = styled(Link)`

@@ -1,10 +1,11 @@
 import express from "express";
-import { Login, Register } from "../controlers/Auth.js";
-import { setBalance } from "../controlers/user.js";
+import { Login, Register, Verifybyemail } from "../controlers/Auth.js";
 
 const Router = express.Router();
 
-Router.post("/register", Register, setBalance);
+Router.post("/register", Register);
 Router.post("/login", Login);
+
+Router.put("/verify", Verifybyemail);
 
 export default Router;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobile } from "../utils/Responsive";
 
 const TestimonialsContainer = styled.section`
   background-color: #e4d813;
@@ -12,12 +13,14 @@ const Itemcardbox = styled.div`
   justify-content: center;
   gap: 20px;
   margin-top: 40px;
+  /* outline: 1px solid red; */
 `;
 
 const TestimonialsHeading = styled.h2`
   font-size: 2.5rem;
   margin-bottom: 40px;
   color: #fff; /* Set heading text color to white for better contrast */
+  ${mobile({ fontSize: "25px" })}
 `;
 
 const TestimonialCard = styled.div`
@@ -27,6 +30,7 @@ const TestimonialCard = styled.div`
   padding: 20px;
   width: 300px;
   max-width: 100%;
+  ${mobile({ width: "90%" })};
 `;
 
 const TestimonialText = styled.p`

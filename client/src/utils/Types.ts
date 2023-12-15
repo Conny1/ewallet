@@ -2,7 +2,9 @@ export type User = {
   id?: number;
   name?: string;
   email: string;
-  password: string;
+  verified?: string;
+  isadmin?: string;
+  password?: string;
   number?: string;
 };
 
@@ -12,6 +14,7 @@ export type Balance = {
   useremail?: string;
   balance?: number;
   pendingid?: number;
+  toid?: string;
 };
 
 export type Pending = {

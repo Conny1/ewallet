@@ -4,6 +4,7 @@ import { useRequestmoneyMutation } from "../utils/ApiRequest";
 import { User } from "../utils/Types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { mobile } from "../utils/Responsive";
 
 const Container = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  ${mobile({ width: "80%" })}
 `;
 
 const Input = styled.input`

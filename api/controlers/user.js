@@ -5,6 +5,7 @@ import {
   inviteemail,
   receiveMoneyEmail,
   sendRequestMail,
+  widthrawCashemail,
 } from "../utils/email.js";
 
 // getBalance
@@ -35,10 +36,10 @@ export const getPending = (req, resp, next) => {
 
 // setBalance amount
 export const setBalance = (req, resp, next) => {
-  const q = `INSERT INTO ${process.env.DATABASE_NAME}.balance(userid, useremail) VALUES(?)`;
-  const values = [req.params.id, req.body.useremail];
+  const q = `UPDATE ${process.env.DATABASE_NAME}.balance SET balance=balance + ? WHERE userid=?`;
+  const values = [[req.body.balance], [req.body.userid]];
 
-  connection.query(q, [values], (err, results) => {
+  connection.query(q, values, (err, results) => {
     // console.log(err);
     if (err) return next(createError(500, "balance server  error"));
 
@@ -71,11 +72,29 @@ export const addtopending = (req, resp, next) => {
     });
   });
 };
+const getUserInfoID = (email) => {
+  return new Promise((resolve, reject) => {
+    const q = `SELECT id, email FROM ${process.env.DATABASE_NAME}.users WHERE email=? `;
+    const values = [email];
+
+    connection.query(q, values, (err, result) => {
+      if (err) {
+        reject(createError(400, "Bad Auth request"));
+      } else {
+        resolve(result[0]);
+      }
+    });
+  });
+};
 
 // subtract balance while sending
 export const sendMoney = async (req, resp, next) => {
   const q = `UPDATE  ${process.env.DATABASE_NAME}.balance SET balance = balance - ? WHERE userid=?`;
   const values = [[req.body.balance], [req.body.userid]];
+  const data = await getUserInfoID(req.body.toid);
+  // console.log(data);
+  if (!data)
+    return next(createError(404, "Account with that email does not exist"));
 
   try {
     await SendMoneyEmail({
@@ -178,4 +197,58 @@ export const adminadusers = async (req, resp, next) => {
   } catch (error) {
     next(createError(500, "request server error"));
   }
+};
+
+export const updateprofile = (req, resp, next) => {
+  const q = `UPDATE ${process.env.DATABASE_NAME}.users SET name=?, email=? WHERE email=?`;
+
+  const values = [[req.body.name], [req.body.email], [req.body.email]];
+
+  connection.query(q, values, (err, result) => {
+    // console.log(err);
+    if (err) return next(createError(500, "verifybyemail server error"));
+
+    return resp.status(200).json({
+      success: true,
+      status: 200,
+      message: "account verified",
+    });
+  });
+};
+
+// subtract balance while sending
+export const withrawCash = async (req, resp, next) => {
+  const q = `UPDATE  ${process.env.DATABASE_NAME}.balance SET balance = balance - ? WHERE userid=?`;
+  const values = [[req.body.balance], [req.body.userid]];
+
+  try {
+    widthrawCashemail({
+      amount: req.body.balance,
+      email: req.body.useremail,
+      name: req.body.toid,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  connection.query(q, values, (err, results) => {
+    console.log(err);
+    if (err) return next(createError(500, "withrawMoney server  error"));
+
+    return resp.status(200).json({
+      success: true,
+      status: 200,
+      message: "Withrawal succesful",
+    });
+  });
+};
+
+export const getallusers = (req, resp, next) => {
+  const q = `SELECT id, name, email,verified, isadmin FROM ${process.env.DATABASE_NAME}.users`;
+
+  connection.query(q, (err, results) => {
+    if (err) return next(createError(500, "Getusers server error"));
+
+    resp.status(200).json(results);
+  });
 };

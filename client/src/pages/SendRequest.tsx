@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
 import { Outlet } from "react-router-dom";
+import { mobile } from "../utils/Responsive";
+import Footer from "../components/Footer";
 
 const MainContainr = styled.div``;
 const Navcontainer = styled.div``;
@@ -21,6 +23,7 @@ const Title = styled.h2`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 20px;
+  ${mobile({ flexWrap: "wrap" })}
 `;
 
 const ActionButton = styled.button`
@@ -35,27 +38,30 @@ const ActionButton = styled.button`
 
 const SendAndRequestPage = () => {
   return (
-    <MainContainr>
-      <Navcontainer>
-        <DashboardNav />
-      </Navcontainer>
-      <Container>
-        <Title>Send and Request Money</Title>
-        <ButtonContainer>
-          <ActionButton>
-            <Link to="/sendandrequest/send">Send Money</Link>
-          </ActionButton>
-          <ActionButton>
-            <Link to="/sendandrequest/request">Request Money</Link>
-          </ActionButton>
-          <ActionButton>
-            <Link to="/sendandrequest/pending">Pending</Link>
-          </ActionButton>
-        </ButtonContainer>
-        {/* Additional components and sections can be added here */}
-      </Container>
-      <Outlet />
-    </MainContainr>
+    <>
+      <MainContainr>
+        <Navcontainer>
+          <DashboardNav />
+        </Navcontainer>
+        <Container>
+          <Title>Send and Request Money</Title>
+          <ButtonContainer>
+            <ActionButton>
+              <Link to="/sendandrequest/send">Send Money</Link>
+            </ActionButton>
+            <ActionButton>
+              <Link to="/sendandrequest/request">Request Money</Link>
+            </ActionButton>
+            <ActionButton>
+              <Link to="/sendandrequest/pending">Pending</Link>
+            </ActionButton>
+          </ButtonContainer>
+          {/* Additional components and sections can be added here */}
+        </Container>
+        <Outlet />
+      </MainContainr>
+      <Footer />
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ const FooterContainer = styled.footer`
   color: #fff;
   padding: 20px 0;
   text-align: center;
+  /* min-height: 200px; */
 `;
 
 const FooterText = styled.p`
@@ -16,7 +17,8 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterText>
-        &copy; {new Date().getFullYear()} Domestic Wire Transfer eWallet |
+        &copy; {new Date().getFullYear()} Domestic Wire Transfer eWallet | All
+        rights reserved
       </FooterText>
     </FooterContainer>
   );

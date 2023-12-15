@@ -4,9 +4,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   useAddtopendingMutation,
+  useGetBalaceQuery,
   useSendmoneyMutation,
 } from "../utils/ApiRequest";
 import { User } from "../utils/Types";
+import { mobile } from "../utils/Responsive";
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +27,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  ${mobile({ width: "80%" })}
 `;
 
 const Input = styled.input`
@@ -54,23 +57,54 @@ const Send = () => {
   const [amount, setamount] = useState("");
   const [email, setemail] = useState("");
   const localStoragedata = localStorage.getItem("user");
-  let userdata: User;
+  let userdata: User | undefined;
 
   if (localStoragedata !== null) {
     userdata = JSON.parse(localStoragedata);
+  } else {
+    console.log("else");
   }
-
-  const [sendamoney, { isSuccess: sendsucces }] = useSendmoneyMutation();
+  const { data } = useGetBalaceQuery(userdata?.id);
+  const [sendamoney, { isSuccess: sendsucces, isError, error: senderror }] =
+    useSendmoneyMutation();
   const [addtopending, { isSuccess: addsucces }] = useAddtopendingMutation();
 
   useEffect(() => {
     if (addsucces && sendsucces) {
       toast("Transaction succesful");
+      setamount("");
+      setemail("");
     }
-  }, [addsucces, sendsucces]);
+
+    if (isError) {
+      if (senderror) {
+        if ("status" in senderror) {
+          if (senderror.status === 404) {
+            toast(
+              `That is not a valid account. Send a request for the user to create an account`
+            );
+          }
+        }
+      }
+    }
+  }, [addsucces, sendsucces, senderror, isError]);
 
   const send = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (data) {
+      // console.log(data);
+      // Ensure 'balance' property exists and is a number
+      if ("balance" in data && typeof data.balance === "string") {
+        const amountToCheck = Number(amount);
+
+        if (Number(data.balance) <= 0 || Number(data.balance) < amountToCheck) {
+          return toast(
+            "You have insufficient funds to complete the transaction"
+          );
+        }
+      }
+    }
+
     if (!email || !amount) {
       return toast("Enter all provided fields");
     }
@@ -79,13 +113,14 @@ const Send = () => {
         userid: userdata?.id,
         balance: Number(amount),
         useremail: userdata?.email,
+        toid: email,
       });
 
       await addtopending({
         userid: userdata?.id,
         amount: Number(amount),
         pending: true,
-        fromid: userdata.email,
+        fromid: userdata?.email,
         toid: email,
       });
     } catch (error) {

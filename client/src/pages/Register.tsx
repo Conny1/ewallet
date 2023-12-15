@@ -73,7 +73,8 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   // redux toolkit endpoint
-  const [register, { isLoading, isSuccess, isError }] = useRegisterMutation();
+  const [register, { isLoading, isSuccess, isError, error }] =
+    useRegisterMutation();
 
   const Register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,11 +106,18 @@ const RegisterPage = () => {
         navigate("/login");
       }, 3000);
     }
-
     if (isError) {
-      toast("Error. Try Again...");
+      if (error) {
+        if ("status" in error) {
+          if (error.status === 406) {
+            toast("An account with that email already exist");
+          }
+        }
+      } else {
+        toast("Error. Try Again...");
+      }
     }
-  }, [isLoading, isError, isSuccess, navigate]);
+  }, [isLoading, isError, isSuccess, navigate, error]);
 
   return (
     <RegisterPageContainer>

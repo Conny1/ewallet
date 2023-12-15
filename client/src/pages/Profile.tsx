@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DashboardNav from "../components/DashboardNav";
+import { useProfileUpdateMutation } from "../utils/ApiRequest";
+import { toast, ToastContainer } from "react-toastify";
+import Footer from "../components/Footer";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -57,24 +60,44 @@ const UpdateButton = styled.button`
 `;
 
 const Profile = () => {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
+  const localdata = localStorage.getItem("user");
+  let userData;
+
+  if (localdata !== null) {
+    userData = JSON.parse(localdata);
+  } else {
+    // Handle the case where localdata is null
+    console.error("localdata is null");
+  }
+  const [name, setName] = useState(userData.name);
+  const [email, setEmail] = useState(userData.email);
   const [password, setPassword] = useState("********");
   const [newName, setNewName] = useState(name);
   const [newEmail, setNewEmail] = useState(email);
   const [newPassword, setNewPassword] = useState(password);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleUpdateClick = () => {
+  const [profileUpdate, { isSuccess }] = useProfileUpdateMutation();
+
+  const handleUpdateClick = async () => {
     setName(newName);
     setEmail(newEmail);
     setPassword(newPassword);
     setIsEditing(false);
+
+    await profileUpdate({ name: newName, email: newEmail });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast("Updated");
+    }
+  }, [isSuccess]);
 
   return (
     <>
       <DashboardNav />
+      <ToastContainer />
       <hr />
       <ProfileContainer>
         <ProfileImage
@@ -138,6 +161,7 @@ const Profile = () => {
           <UpdateButton onClick={() => setIsEditing(true)}>Edit</UpdateButton>
         )}
       </ProfileContainer>
+      <Footer />
     </>
   );
 };

@@ -22,7 +22,7 @@ export const walletApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["balance", "pending"],
+  tagTypes: ["balance", "pending", "users"],
   endpoints: (builder) => ({
     register: builder.mutation<void, User>({
       query: (body) => ({
@@ -39,7 +39,7 @@ export const walletApi = createApi({
       }),
     }),
 
-    getBalace: builder.query<Balance, number>({
+    getBalace: builder.query<Balance, number | undefined>({
       query: (id) => `users/getbalance/${id}`,
       providesTags: ["balance"],
     }),
@@ -79,6 +79,7 @@ export const walletApi = createApi({
       query: (id) => `users/pendingtransacrion/${id}`,
       providesTags: ["pending"],
     }),
+    // /pendingtransacrion/:id
 
     requestmoney: builder.mutation<void, Email>({
       query: (body) => ({
@@ -95,15 +96,57 @@ export const walletApi = createApi({
         body,
       }),
     }),
+
+    verify: builder.mutation<void, User>({
+      query: (body) => ({
+        url: "/auth/verify",
+        method: "PUT",
+        body,
+      }),
+    }),
+
+    profileUpdate: builder.mutation<void, User>({
+      query: (body) => ({
+        url: "/users/profileupdate",
+        method: "PUT",
+        body,
+      }),
+    }),
+
+    widthrawmoney: builder.mutation<void, Balance>({
+      query: (body) => ({
+        url: `/users/widthraw/${body.userid}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["balance"],
+    }),
+
+    getallusers: builder.query<User[], void>({
+      query: () => `users/getallusers`,
+      providesTags: ["users"],
+    }),
+
+    setbalance: builder.mutation<void, Balance>({
+      query: (body) => ({
+        url: `/users/setbalance`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["balance"],
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useSetbalanceMutation,
+  useGetallusersQuery,
   useLoginMutation,
   useRegisterMutation,
   useGetBalaceQuery,
+  useProfileUpdateMutation,
   useGetPendingQuery,
   useAddtopendingMutation,
   useSendmoneyMutation,
@@ -111,4 +154,6 @@ export const {
   usePendingtransacrionQuery,
   useInviteUsersMutation,
   useRequestmoneyMutation,
+  useVerifyMutation,
+  useWidthrawmoneyMutation,
 } = walletApi;

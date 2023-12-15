@@ -10,6 +10,8 @@ import support from "../images/support.svg";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import { mobile } from "../utils/Responsive";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 const Container = styled.div`
   width: 100%;
@@ -28,6 +30,7 @@ const Header = styled.div`
     width: 40%;
     text-align: center;
     color: #fff;
+    ${mobile({ width: "100%", fontSize: "20px" })};
   }
   button {
     border-radius: 30px;
@@ -50,6 +53,7 @@ const Row1 = styled.div`
     width: 70%;
     font-size: 40px;
     text-align: center;
+    ${mobile({ width: "100%", fontSize: "20px" })};
   }
   p {
     width: 60%;
@@ -63,13 +67,14 @@ const Row1Item = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-between;
+  ${mobile({ justifyContent: "center", marginBottom: "10px" })};
 `;
 const Item = styled.div`
-  /* outline: 1px solid red; */
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 250px;
+  ${mobile({ width: "90%", outline: "1px solid gainsboro" })};
 
   img {
     width: 100px;
@@ -137,6 +142,7 @@ const Home = () => {
         <Testimonials />
         <Footer />
       </Body>
+      <FloatingWhatsApp phoneNumber="+254742429535" accountName="Admin" />
     </Container>
   );
 };

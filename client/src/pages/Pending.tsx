@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useGetPendingQuery } from "../utils/ApiRequest";
+import { usePendingtransacrionQuery } from "../utils/ApiRequest";
 
 const Container = styled.div`
   display: flex;
@@ -54,7 +54,8 @@ const PaymentPendingPage = () => {
     userdata = JSON.parse(localStoragedata);
   }
 
-  const { data } = useGetPendingQuery(userdata?.id);
+  const { data } = usePendingtransacrionQuery(userdata?.id);
+  // console.log(data);
   return (
     <Container>
       {data?.length === 0 ? (

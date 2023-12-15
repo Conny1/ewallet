@@ -1,23 +1,35 @@
-pending
+user
 
-CREATE TABLE ewallet.pending(
+CREATE TABLE users(
+id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) ,
+email VARCHAR(255) ,
+password VARCHAR(255) ,
+number VARCHAR(255) ,
+verified VARCHAR(255) DEFAULT "false" ,
+isadmin VARCHAR(255)  DEFAULT "false" 
+);
+
+
+CREATE TABLE pending(
 id INT  PRIMARY KEY auto_increment NOT NULL,
 userid INT NOT NULL,
 amount DECIMAL(10, 2),
 pending VARCHAR(255) default "false",
 fromid VARCHAR(255) NOT NULL,
 toid VARCHAR(255) NOT NULL,
-FOREIGN KEY (userid) REFERENCES ewallet.users(id)
+FOREIGN KEY (userid) REFERENCES users(id)
 );
 
-balance
 
-CREATE TABLE ewallet.balance(
+CREATE TABLE balance(
 id INT  PRIMARY KEY auto_increment NOT NULL,
 userid INT NOT NULL,
 useremail VARCHAR(255) NOT NULL,
-balance DECIMAL(10,2) DEFAULT 1000 ,
-FOREIGN KEY (userid) REFERENCES ewallet.users(id)
+balance DECIMAL(10,2) DEFAULT 0,
+FOREIGN KEY (userid) REFERENCES users(id)
 );
 
-NWWo.-BKzH5b
+
+
+

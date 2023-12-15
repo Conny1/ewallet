@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import DashboardNav from "../components/DashboardNav";
+
 import {
   useGetPendingQuery,
   useInviteUsersMutation,
@@ -14,6 +14,7 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   background-color: #f8f8f8;
+  overflow-y: scroll;
 `;
 
 const PaymentTable = styled.table`
@@ -139,8 +140,8 @@ const AdminPanel = () => {
 
   return (
     <>
-      <DashboardNav />
       <ToastContainer />
+
       <Container>
         {data?.length === 0 ? (
           <p>No pending transactions yet</p>
